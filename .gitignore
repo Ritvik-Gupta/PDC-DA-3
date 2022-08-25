@@ -1,4 +1,7 @@
 *.sw[mnop]
+
+github-token.txt
+
 mpi_bsend
 communication
 ring
