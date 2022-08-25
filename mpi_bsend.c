@@ -5,14 +5,14 @@
 
 #define BUF_SIZE 20
 
-void main(int argc, char* argv[]) {
+void main(int argc, char* argv []) {
 	int rank, world_size;
 	MPI_Init(&argc, &argv);
 	MPI_Comm_rank(MPI_COMM_WORLD, &rank);
 	MPI_Comm_size(MPI_COMM_WORLD, &world_size);
 
-        if (world_size != 2) {
-        	printf("\nInvalid Number of Processes Detected\n");
+	if (world_size != 2) {
+		printf("\nInvalid Number of Processes Detected\n");
 		exit(2);
 	}
 
@@ -32,7 +32,7 @@ void main(int argc, char* argv[]) {
 		for (int i = 0; i < 10; ++i) {
 			MPI_Recv(&mem, 1, MPI_DOUBLE, 0, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
 			printf("Received %g\n", mem);
-		}	
+		}
 		printf("Finised Receiving\n");
 	}
 

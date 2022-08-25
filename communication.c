@@ -8,12 +8,12 @@
 #define PROFILE_ITERATIONS 100
 #define DATASET_SIZE 5
 
-void generate_rand_data(double data[]) {
+void generate_rand_data(double data []) {
 	for (int i = 0; i < DATASET_SIZE; ++i)
 		data[i] = (double)(rand() % 100) / 10.0;
 }
 
-void print_data(double data[]) {
+void print_data(double data []) {
 	for (int i = 0; i < DATASET_SIZE; ++i)
 		printf("%g\t", data[i]);
 	printf("\n\n");
@@ -23,7 +23,7 @@ typedef struct {
 	double longest_time, avg_time;
 } ProfileResult;
 
-ProfileResult profile_for_send(int (*mpi_send_function)(const void*, int, MPI_Datatype, int, int, MPI_Comm), double dataset[]) {
+ProfileResult profile_for_send(int (*mpi_send_function)(const void*, int, MPI_Datatype, int, int, MPI_Comm), double dataset []) {
 	double start, end, time_taken, total_time;
 	ProfileResult res;
 
@@ -42,7 +42,7 @@ ProfileResult profile_for_send(int (*mpi_send_function)(const void*, int, MPI_Da
 	return res;
 }
 
-void main(int argc, char* argv[]) {
+void main(int argc, char* argv []) {
 	srand(time(NULL));
 
 	int rank, world_size;
@@ -53,9 +53,9 @@ void main(int argc, char* argv[]) {
 
 	if (world_size != 2) {
 		printf("\n========\tInvalid Number of Processes Detected\t=========\n");
-                exit(1);
+		exit(1);
 	}
-	
+
 	double* buffer = malloc(sizeof(double) * BUF_SIZE);
 	int buf_size = sizeof(double) * BUF_SIZE + MPI_BSEND_OVERHEAD;
 	MPI_Buffer_attach(buffer, buf_size);
@@ -67,24 +67,24 @@ void main(int argc, char* argv[]) {
 		printf("Standard Sent value in\nAverage = %.10g s\tLongest = %.10g s\n", prf.avg_time, prf.longest_time);
 		print_data(value);
 
-                generate_rand_data(value);
-                prf = profile_for_send(MPI_Ssend, value);
-                printf("Synchronous Sent value in\nAverage = %.10g s\tLongest = %.10g s\n", prf.avg_time, prf.longest_time);
-                print_data(value);
+		generate_rand_data(value);
+		prf = profile_for_send(MPI_Ssend, value);
+		printf("Synchronous Sent value in\nAverage = %.10g s\tLongest = %.10g s\n", prf.avg_time, prf.longest_time);
+		print_data(value);
 
 		generate_rand_data(value);
-                prf = profile_for_send(MPI_Bsend, value);
-                printf("Buffered Sent value in\nAverage = %.10g s\tLongest = %.10g s\n", prf.avg_time, prf.longest_time);
-                print_data(value);
+		prf = profile_for_send(MPI_Bsend, value);
+		printf("Buffered Sent value in\nAverage = %.10g s\tLongest = %.10g s\n", prf.avg_time, prf.longest_time);
+		print_data(value);
 
 		generate_rand_data(value);
 		prf = profile_for_send(MPI_Rsend, value);
-                printf("Ready Sent value in\nAverage = %.10g s\tLongest = %.10g s\n", prf.avg_time, prf.longest_time);
-                print_data(value);
+		printf("Ready Sent value in\nAverage = %.10g s\tLongest = %.10g s\n", prf.avg_time, prf.longest_time);
+		print_data(value);
 
 	} else if (rank == 1) {
 		for (int i = 0; i < 4 * PROFILE_ITERATIONS; ++i) {
-			MPI_Recv(&value, DATASET_SIZE, MPI_DOUBLE, 0, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);			
+			MPI_Recv(&value, DATASET_SIZE, MPI_DOUBLE, 0, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
 		}
 	}
 

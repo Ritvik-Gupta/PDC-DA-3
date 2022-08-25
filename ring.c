@@ -11,7 +11,7 @@ double truncated_time() {
 	return time;
 }
 
-void main(int argc, char* argv[]) {
+void main(int argc, char* argv []) {
 	srand(time(NULL));
 
 	double curr_time;
@@ -27,28 +27,28 @@ void main(int argc, char* argv[]) {
 
 	int value;
 	int next_rank = (rank + 1) % world_size, prev_rank = (rank + world_size - 1) % world_size;
-	switch(rank) {
-	case 0:
-		value = rand() % 100;
-		MPI_Send(&value, 1, MPI_INT, next_rank, 0, MPI_COMM_WORLD);
-		curr_time = truncated_time();
-		printf("Sent data ( =%d ) from %d to %d at time %.20g\n", value, rank, next_rank, curr_time);
+	switch (rank) {
+		case 0:
+			value = rand() % 100;
+			MPI_Send(&value, 1, MPI_INT, next_rank, 0, MPI_COMM_WORLD);
+			curr_time = truncated_time();
+			printf("Sent data ( =%d ) from %d to %d at time %.20g\n", value, rank, next_rank, curr_time);
 
-		MPI_Recv(&value, 1, MPI_INT, prev_rank, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
-		curr_time = truncated_time();
-		printf("Received data ( =%d ) from %d to %d at time %.20g\n", value, prev_rank, rank, curr_time);
-	break;
+			MPI_Recv(&value, 1, MPI_INT, prev_rank, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+			curr_time = truncated_time();
+			printf("Received data ( =%d ) from %d to %d at time %.20g\n", value, prev_rank, rank, curr_time);
+			break;
 
-	default:
-		MPI_Recv(&value, 1, MPI_INT, prev_rank, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
-		curr_time = truncated_time();
-		printf("Received data ( =%d ) from %d to %d at time %.20g\n", value, prev_rank, rank, curr_time);
+		default:
+			MPI_Recv(&value, 1, MPI_INT, prev_rank, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+			curr_time = truncated_time();
+			printf("Received data ( =%d ) from %d to %d at time %.20g\n", value, prev_rank, rank, curr_time);
 
-		MPI_Send(&value, 1, MPI_INT, next_rank, 0, MPI_COMM_WORLD);
-		curr_time = truncated_time();
-		printf("Send data ( =%d ) from %d to %d at time %.20g\n", value, rank, next_rank, curr_time);	
-	break;
-	} 
+			MPI_Send(&value, 1, MPI_INT, next_rank, 0, MPI_COMM_WORLD);
+			curr_time = truncated_time();
+			printf("Send data ( =%d ) from %d to %d at time %.20g\n", value, rank, next_rank, curr_time);
+			break;
+	}
 
 	MPI_Finalize();
 }
