@@ -20,6 +20,11 @@ void main(int argc, char* argv[]) {
 	MPI_Comm_rank(MPI_COMM_WORLD, &rank);
 	MPI_Comm_size(MPI_COMM_WORLD, &world_size);
 
+	if (world_size == 1) {
+		fprintf(stderr, "===\tInsufficient Number of Processes detected\t===\n");
+		MPI_Abort(MPI_COMM_WORLD, 1);
+	}
+
 	int value;
 	int next_rank = (rank + 1) % world_size, prev_rank = (rank + world_size - 1) % world_size;
 	switch(rank) {
