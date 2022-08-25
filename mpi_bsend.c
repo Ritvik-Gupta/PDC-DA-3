@@ -13,7 +13,7 @@ void main(int argc, char* argv[]) {
 
         if (world_size != 2) {
         	printf("\nInvalid Number of Processes Detected\n");
-		exit(1);
+		exit(2);
 	}
 
 	double* buffer = malloc(BUF_SIZE * sizeof(double));
