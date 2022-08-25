@@ -2,6 +2,8 @@
 
 github-token.txt
 
+.vscode
+
 mpi_bsend
 communication
 ring
